@@ -32,8 +32,13 @@ RUN pnpm ui:build
 
 ENV NODE_ENV=production
 
+# Create .clawdbot config dir with node ownership before switching user
+# so Docker volume mount initializes with correct permissions
+RUN mkdir -p /home/node/.clawdbot && chown -R node:node /home/node/.clawdbot
+
 # Security hardening: Run as non-root user
 USER node
 
-# Keep container alive for onboarding via Terminal
-CMD ["sleep", "infinity"]
+# Persistent config lives in /home/node/.clawdbot (mount volume here)
+# Start gateway after onboarding
+CMD ["node", "dist/index.js", "gateway"]
