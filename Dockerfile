@@ -31,15 +31,11 @@ RUN pnpm ui:build
 
 ENV NODE_ENV=production
 
-# State dir = persistent volume mount point; create with node ownership
-# so Docker initializes new volumes with correct permissions
-RUN mkdir -p /home/node/.openclaw && chown -R node:node /home/node/.openclaw
+# State dir = persistent volume mount point
 ENV CLAWDBOT_STATE_DIR=/home/node/.openclaw
 
-USER node
-
-# Startup: run onboard on first launch (no moltbot.json), then start gateway.
-# Pass secrets via env vars: CLAWDBOT_OPENROUTER_API_KEY and OPENCLAW_GATEWAY_TOKEN.
+# Runs as root so the startup script can write to the existing root-owned volume.
+# Secrets via env vars: CLAWDBOT_OPENROUTER_API_KEY and OPENCLAW_GATEWAY_TOKEN.
 CMD ["/bin/sh", "-c", \
   "if [ ! -f $CLAWDBOT_STATE_DIR/moltbot.json ]; then \
      node /app/dist/index.js onboard \
