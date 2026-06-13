@@ -153,6 +153,7 @@
   },
   "packageManager": "pnpm@10.23.0",
   "dependencies": {
+    "@composio/core": "^0.5.5",
     "@agentclientprotocol/sdk": "0.13.1",
     "@aws-sdk/client-bedrock": "^3.975.0",
     "@buape/carbon": "0.14.0",

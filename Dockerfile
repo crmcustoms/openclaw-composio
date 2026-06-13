@@ -24,10 +24,6 @@ COPY scripts ./scripts
 RUN pnpm install
 
 COPY . .
-
-# extensions/composio excluded from workspace (moltbot peer dep not on npm), install separately
-RUN cd extensions/composio && pnpm install --ignore-workspace
-
 RUN CLAWDBOT_A2UI_SKIP_MISSING=1 pnpm build
 ENV CLAWDBOT_PREFER_PNPM=1
 RUN pnpm ui:install
